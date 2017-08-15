@@ -2,7 +2,6 @@ import querystring from 'querystring';
 import https from 'https';
 import _ from 'lodash';
 import crypto from 'crypto';
-import dateformat from 'dateformat';
 
 module.exports = class Bxthai {
     constructor(key = '', secret = '', twofa = '') {
@@ -183,8 +182,8 @@ module.exports = class Bxthai {
 
     transactionHistory(currency = 'BTC', 
     type = 'fee', 
-    startDate = dateformat(new Date.now(), 'yyyy-mm-dd hh:MM'), 
-    endDate = dateformat(new Date.now() + 1, 'yyyy-mm-dd hh:MM'), 
+    startDate = '2017-08-01 08:00:00', 
+    endDate = '2017-08-01 08:00:00', 
     callback) {
         this._privateApiRequest('history', {
             currency: currency,
