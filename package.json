@@ -1,0 +1,31 @@
+{
+    "name": "bxthai",
+    "version": "0.1.0",
+    "main": "dist/bxthai.js",
+    "description": "bx.in.th REST API wrapper",
+    "scripts": {
+        "build": "babel --out-dir dist src"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "lodash": "^4.17.4"
+    },
+    "devDependencies": {
+        "babel-cli": "^6.24.1",
+        "babel-eslint": "^7.2.3",
+        "babel-preset-es2015": "^6.24.1",
+        "eslint": "^4.4.1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/thammarongg/bxthai"
+    },
+    "engines": {
+        "node": ">=4"
+    },
+    "babel": {
+        "presets": [
+            "es2015"
+        ]
+    }
+}
