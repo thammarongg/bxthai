@@ -2,6 +2,7 @@ import querystring from 'querystring';
 import https from 'https';
 import _ from 'lodash';
 import crypto from 'crypto';
+import dateformat from 'dateformat';
 
 module.exports = class Bxthai {
     constructor(key = '', secret = '', twofa = '') {
@@ -137,6 +138,84 @@ module.exports = class Bxthai {
         this._request(https, options, body, callback);
     }
 
+    //
+    //  Private APIs
+    //
+    createOrder(pairing, type, amount, rate, callback) {
+        this._privateApiRequest('order', {
+            pairing: pairing,
+            type: type,
+            amount: amount,
+            rate: rate
+        }, callback);
+    }
 
+    cancelOrder(pairing, orderId, callback) {
+        if (orderId.constructor == Array) {
+            if (orderId.length > 10) {
+                throw 'Current limit of orders per cancelation request is 10';
+            }
+            orderId = orderId.toString();
+        }
 
-}
+        this._privateApiRequest('cancel', {
+            pairing: pairing,
+            order_id: orderId
+        }, callback);
+    }
+
+    getBalances(callback) {
+        this._privateApiRequest('balance', {}, callback);
+    }
+
+    getOrders(pairing = -1, type = 'hold', callback) {
+        let params = {};
+
+        if (pairing !== -1) {
+            params.pairing = pairing;
+        }
+        if (type !== 'hold') {
+            params.type = type;
+        }
+
+        this._privateApiRequest('getorders', params, callback);
+    }
+
+    transactionHistory(currency = 'BTC', 
+    type = 'fee', 
+    startDate = dateformat(new Date.now(), 'yyyy-mm-dd hh:MM'), 
+    endDate = dateformat(new Date.now() + 1, 'yyyy-mm-dd hh:MM'), 
+    callback) {
+        this._privateApiRequest('history', {
+            currency: currency,
+            type: type,
+            start_date: startDate,
+            end_date: endDate
+        }, callback);
+    }
+
+    depositAddress(currency, genNew = false, callback) {
+        this._privateApiRequest('deposit', {
+            currency: currency,
+            new: genNew
+        }, callback);
+    }
+
+    requestWithdrawal(currency, amount, address, bankId) {
+        let params = {
+            currency: currency,
+            amount: amount,
+            address: address
+        };
+
+        if (bankId !== '') {
+            params.bank_id = bankId;
+        }
+
+        this._privateApiRequest('withdrawal', params, callback);
+    }
+
+    withdrawalHistory(callback) {
+        this._privateApiRequest('withdrawal-history', {}, callback);
+    }
+};
